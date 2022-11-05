@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 21, 2022 at 04:27 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 7.4.29
+-- Generation Time: Oct 29, 2022 at 03:48 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -66,6 +67,14 @@ CREATE TABLE `tdistributor` (
   `notelp` varchar(13) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `tdistributor`
+--
+
+INSERT INTO `tdistributor` (`iddist`, `nmdist`, `alamat`, `notelp`) VALUES
+(1, 'wig', 'badg', ''),
+(2, 'ssk', 'bk', '988');
+
 -- --------------------------------------------------------
 
 --
@@ -77,6 +86,14 @@ CREATE TABLE `tjenis` (
   `jenisbarang` varchar(35) NOT NULL,
   `ket` varchar(19) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tjenis`
+--
+
+INSERT INTO `tjenis` (`idjenis`, `jenisbarang`, `ket`) VALUES
+(7, 'Cat', 'Kayu'),
+(8, 'palu', 'temnya paku');
 
 -- --------------------------------------------------------
 
@@ -123,6 +140,31 @@ CREATE TABLE `tuser` (
   `password` varchar(15) NOT NULL,
   `hakakses` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `vbarang`
+-- (See below for the actual view)
+--
+CREATE TABLE `vbarang` (
+`idbarang` int(11)
+,`nmbarang` varchar(50)
+,`jenisbarang` varchar(35)
+,`stok` int(11)
+,`harga` int(11)
+,`nmdist` varchar(35)
+,`status` enum('0','1')
+);
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vbarang`
+--
+DROP TABLE IF EXISTS `vbarang`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vbarang`  AS  select `tbarang`.`idbarang` AS `idbarang`,`tbarang`.`nmbarang` AS `nmbarang`,`tjenis`.`jenisbarang` AS `jenisbarang`,`tbarang`.`stok` AS `stok`,`tbarang`.`harga` AS `harga`,`tdistributor`.`nmdist` AS `nmdist`,`tbarang`.`status` AS `status` from ((`tbarang` join `tdistributor` on(`tbarang`.`iddist` = `tdistributor`.`iddist`)) join `tjenis` on(`tbarang`.`idjenis` = `tjenis`.`idjenis`)) ;
 
 --
 -- Indexes for dumped tables
@@ -178,13 +220,13 @@ ALTER TABLE `tuser`
 -- AUTO_INCREMENT for table `tdistributor`
 --
 ALTER TABLE `tdistributor`
-  MODIFY `iddist` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `iddist` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tjenis`
 --
 ALTER TABLE `tjenis`
-  MODIFY `idjenis` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idjenis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `tuser`
